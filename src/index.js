@@ -1,29 +1,43 @@
-// index.js
 
-// Callbacks
-const handleClick = (ramen) => {
-  // Add code
-};
+const ramenAPI = 'http://localhost:3000/ramens'
+const ramenMenu = document.getElementById('ramen-menu')
+const newRamenForm = document.getElementById('new-ramen')
+  fetch(ramenAPI)
+    .then(res => res.json())
+    .then(renderRamens);
+  
+  function renderRamens(ramens) {
+    ramens.forEach(renderRamen);
+  }
 
-const addSubmitListener = () => {
-  // Add code
-}
 
-const displayRamens = () => {
-  // Add code
-};
+  function renderRamen(ramen) {
+    const ramenImage = document.createElement('img')
+    ramenImage.src = ramen.image;
+    ramenMenu.append(ramenImage)
+    
+    ramenImage.addEventListener('click', () => ramenClick(ramen))
+  }
+  
+  function ramenClick(ramen) {
+    document.getElementById('detail-image').src = ramen.image;
+    document.getElementById('detail-name').textContent = ramen.name;
+    document.getElementById('detial-restaurant').textContent = ramen.restaurant;
+    document.getElementById('rating-display').textContent = ramen.rating;
+    document.getElementById('comment-display').textContent = ramen.comment;
+  }
 
-const main = () => {
-  // Invoke displayRamens here
-  // Invoke addSubmitListener here
-}
+  document.getElementById('new-ramen').addEventListener('submit', newRamenClick)
 
-main()
-
-// Export functions for testing
-export {
-  displayRamens,
-  addSubmitListener,
-  handleClick,
-  main,
-};
+  function newRamenClick(e) {
+    e.preventDefault();
+    const newRamen = {
+        name: e.target.name.value,
+        restaurant: e.target.restaurant.value,
+        image: e.target.image.value,
+        rating: e.target.rating.value,
+        comment: e.target['new-comment'].value,
+    }
+    renderRamen(newRamen)
+    e.target.reset()
+  }
